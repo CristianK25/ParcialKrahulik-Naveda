@@ -5,9 +5,7 @@ import java.time.LocalDate;
 
 
 public class Residente {
-    private int id;
     private String nombre;
-    private String apellido;
     private String email;
     private int dni;
     private LocalDate fechaIngreso;
@@ -16,28 +14,27 @@ public class Residente {
     public Residente() {
     }
 
-    
-    public Residente(int id, String nombre, String apellido, String email, int dni, Departamento departamento) {
-        this.id = id;
+    public Residente(String nombre, String email, int dni, LocalDate fechaIngreso) {
         this.nombre = nombre;
-        this.apellido = apellido;
+        this.email = email;
+        this.dni = dni;
+        this.fechaIngreso = fechaIngreso;
+    }
+
+    
+    
+    public Residente(int dni,String nombre, String email, Departamento departamento) {
+        this.nombre = nombre;
         this.email = email;
         this.dni = dni;
         this.fechaIngreso = LocalDate.now();
         this.departamento = departamento;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public String getNombre() {
         return nombre;
     }
 
-    public String getApellido() {
-        return apellido;
-    }
 
     public String getEmail() {
         return email;
@@ -55,15 +52,18 @@ public class Residente {
         return departamento;
     }
 
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
+    }
+
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Empleado{");
-        sb.append("\nid = ").append(id);
-        sb.append("\nNombre = ").append(nombre);
-        sb.append("\nApellido = ").append(apellido);
-        sb.append("\nEmail = ").append(email);
         sb.append("\nDNI = ").append(dni);
+        sb.append("\nNombre = ").append(nombre);
+        sb.append("\nEmail = ").append(email);
         sb.append("\nFecha de Ingreso = ").append(fechaIngreso);
         sb.append("\nDepartamento = ").append(departamento);
         sb.append('}');

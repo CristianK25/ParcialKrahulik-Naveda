@@ -5,7 +5,7 @@ import java.util.List;
 
 
 public interface GenericDAO <E>{
-    void insertar(E e);
-    E buscarPorNombre();
+    boolean insertar(E e);
+    E buscar(String x,int y);
     List<E> buscarTodos();
 }

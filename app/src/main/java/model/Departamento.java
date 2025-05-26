@@ -6,34 +6,22 @@ import java.util.List;
 
 
 public class Departamento {
-    private int id;
     private String descripcion;
     private int numeroPiso;
     private String numeroDepartamento;
-    private List<Residente> empleados; 
 
     public Departamento() {
     }
 
-    public Departamento(int id, String descripcion, int numeroPiso, String numeroDepartamento) {
-        this.id = id;
+    public Departamento(int numeroPiso, String numeroDepartamento,String descripcion) {
         this.descripcion = descripcion;
         this.numeroPiso = numeroPiso;
         this.numeroDepartamento = numeroDepartamento;
-        this.empleados = new ArrayList<>();
     }
     
-    public int getId() {
-        return id;
-    }
-
 
     public String getDescripcion() {
         return descripcion;
-    }
-
-    public List<Residente> getEmpleados() {
-        return empleados;
     }
 
     public int getNumeroPiso() {
@@ -48,11 +36,9 @@ public class Departamento {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Departamento{");
-        sb.append("id = ").append(id);
+        sb.append("\nNumero del Piso = ").append(numeroPiso);
+        sb.append("\nNumero del Departamento = ").append(numeroDepartamento);
         sb.append("\nDescripcion = ").append(descripcion);
-        sb.append("\nNumeroPiso = ").append(numeroPiso);
-        sb.append("\nNumeroDepartamento = ").append(numeroDepartamento);
-        sb.append("\nEmpleados = ").append(empleados).append("\n");
         sb.append('}');
         return sb.toString();
     }
