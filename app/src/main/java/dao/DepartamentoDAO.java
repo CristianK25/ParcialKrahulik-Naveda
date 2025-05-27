@@ -4,6 +4,7 @@ package dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import model.Departamento;
 import util.DatabaseManager;
@@ -61,8 +62,27 @@ public class DepartamentoDAO implements GenericDAO<Departamento>{
 
     @Override
     public List<Departamento> buscarTodos() {
-        String sql = "";
-        return null;
+        List<Departamento> departamentos = new ArrayList<>();
+        String sql = "SELECT * FROM departamento";
+
+        try (PreparedStatement ps = DatabaseManager.obtenerConexion().prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Departamento d = new Departamento(
+                    rs.getInt("numero_piso"),
+                    rs.getString("numero_departamento"),
+                    rs.getString("descripcion") // <- orden correcto según tu constructor
+                );
+                departamentos.add(d);
+                Log.debug("Departamento encontrado: Piso " + d.getNumeroPiso() + ", Nº " + d.getNumeroDepartamento());
+            }
+
+        } catch (SQLException e) {
+            Log.error("Error al buscar todos los departamentos", e);
+        }
+
+        return departamentos;
     }
 
 }

@@ -4,16 +4,17 @@ package vistas;
 import com.formdev.flatlaf.intellijthemes.FlatCarbonIJTheme;
 import javax.swing.JOptionPane;
 import controlador.Controlador;
+import util.VistaUtil;
 
-public class Vista {
+public class Vista{
     //Atributos Residente
-    private static int textoDNI;
+    private static Integer textoDNI;
     private static String textoNombre;
     private static String textoApellido;
     private static String textoEmail;
     //Atributos Departamentos
     private static String textoDescripcion;
-    private static int textoNumeroPiso;
+    private static Integer textoNumeroPiso;
     private static String textoNumeroDepartamento;
     
     
@@ -68,33 +69,56 @@ public class Vista {
     }
     
     public static void ingresarResidente(){
-        textoDNI = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el DNI del Residente"));
-        textoNombre = JOptionPane.showInputDialog("Ingrese el nombre del Residente");
-        textoEmail = JOptionPane.showInputDialog("Ingrese el email del Residente");
-        Controlador.ingresarResidente(textoDNI, textoNombre, textoEmail);
+        textoDNI = VistaUtil.pedirEntero("Ingrese el DNI del Residente");
+        if (textoDNI == null) return;
+
+        textoNombre = VistaUtil.pedirTexto("Ingrese el nombre del Residente");
+        if (textoNombre == null) return;
+
+        textoEmail = VistaUtil.pedirTexto("Ingrese el email del Residente");
+        if (textoEmail == null) return;
+        if (Controlador.ingresarResidente(textoDNI, textoNombre, textoEmail)) 
+            JOptionPane.showMessageDialog(null,"Residente Ingresado correctamente");
+        else
+            JOptionPane.showMessageDialog(null, "Residente no ingresado");
     }
     
     public static void mostrarResidente(){
-        textoNombre = JOptionPane.showInputDialog("Ingrese el nombre del Residente a buscar");
+        textoNombre = VistaUtil.pedirTexto("Ingrese el nombre del Residente a buscar");
+        if (textoNombre == null) return;
         Controlador.mostrarResidente(textoNombre);
     }
     
     public static void ingresarDepartamento(){
-        textoNumeroPiso = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el Numero del piso"));
-        textoNumeroDepartamento = JOptionPane.showInputDialog("Ingrese el Numero del departamento \n(Solo dos caracteres, ej: 1A)");
-        textoDescripcion = JOptionPane.showInputDialog("Ingrese la descripcion del Departamento");
+        textoNumeroPiso = VistaUtil.pedirEntero("Ingrese el Número del piso");
+        if (textoNumeroPiso == null) return;
+
+        textoNumeroDepartamento = VistaUtil.pedirTexto("Ingrese el Número del departamento \n(Solo dos caracteres, ej: 1A)");
+        if (textoNumeroDepartamento == null) return;
+
+        textoDescripcion = VistaUtil.pedirTexto("Ingrese la descripción del Departamento");
+        if (textoDescripcion == null) return;
+
+        Controlador.ingresarDepartamento(textoNumeroPiso, textoNumeroDepartamento, textoDescripcion);
 
     }
 
     public static void mostrarDepartamentos(){
-        textoNumeroPiso = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el Numero del piso"));
-        textoNumeroDepartamento = JOptionPane.showInputDialog("Ingrese el Numero del departamento \n(Solo dos caracteres, ej: 1A)");
+        textoNumeroPiso = VistaUtil.pedirEntero("Ingrese el Número del piso");
+        if (textoNumeroPiso == null) return;
+        textoNumeroDepartamento = VistaUtil.pedirTexto("Ingrese el Número del departamento \n(Solo dos caracteres, ej: 1A)");
+        if (textoNumeroDepartamento == null) return;
+        Controlador.mostrarDepartamentos(textoNumeroPiso, textoNumeroDepartamento);
     }
     
     public static void mudarResidente(){
-        textoDNI = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el DNI del Residente a mudar"));
-        textoNumeroPiso = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el Numero del piso para mudar al Residente"));
-        textoNumeroDepartamento = JOptionPane.showInputDialog("Ingrese el Numero del departamento \n(Solo dos caracteres, ej: 1A)");
+        textoDNI = VistaUtil.pedirEntero("Ingrese el DNI del Residente a mudar");
+        if (textoDNI == null) return;
+        textoNumeroPiso = VistaUtil.pedirEntero("Ingrese el Número del piso para mudar al Residente");
+        if (textoNumeroPiso == null) return;
+        textoNumeroDepartamento = VistaUtil.pedirTexto("Ingrese el Número del departamento \n(Solo dos caracteres, ej: 1A)");
+        if (textoNumeroDepartamento == null) return;
+        Controlador.mudarResidente(textoDNI, textoNumeroPiso, textoNumeroDepartamento);
     }
     
     public static void salir(){
