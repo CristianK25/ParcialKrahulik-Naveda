@@ -4,20 +4,23 @@ package vistas;
 import com.formdev.flatlaf.intellijthemes.FlatCarbonIJTheme;
 import javax.swing.JOptionPane;
 import controlador.Controlador;
+import model.*;
+import util.Log;
 import util.VistaUtil;
 
 public class Vista{
     //Atributos Residente
     private static Integer textoDNI;
     private static String textoNombre;
-    private static String textoApellido;
     private static String textoEmail;
     //Atributos Departamentos
     private static String textoDescripcion;
     private static Integer textoNumeroPiso;
     private static String textoNumeroDepartamento;
     
-    
+    /**
+     * Un menu lanzado con JOptionPane conla elecciones que el usuario puede elegir.
+     */
     public void menuPrincipal(){
         FlatCarbonIJTheme.setup();
         String[] opciones = {"Ingresar Residente",
@@ -45,6 +48,11 @@ public class Vista{
         }while(opcion!=5);
     }
     
+    /**
+     * El metodo recibe un entero haciendo referencia a la posicion de la eleccion que el
+     * usuario eligio
+     * @param opcion 
+     */
     private static void opcionElegida(int opcion){
         switch (opcion) {
             case 0 -> {
@@ -68,6 +76,10 @@ public class Vista{
         }
     }
     
+    /**
+     * Se ingresan el dni, nombre y email verificando que el usuario no cancele
+     * o quede vacio
+     */
     public static void ingresarResidente(){
         textoDNI = VistaUtil.pedirEntero("Ingrese el DNI del Residente");
         if (textoDNI == null) return;
@@ -86,7 +98,19 @@ public class Vista{
     public static void mostrarResidente(){
         textoNombre = VistaUtil.pedirTexto("Ingrese el nombre del Residente a buscar");
         if (textoNombre == null) return;
-        Controlador.mostrarResidente(textoNombre);
+        textoDNI = VistaUtil.pedirEntero("Ingrese el DNI del Residente");
+        if (textoDNI == null) return;
+        Residente residente = Controlador.mostrarResidente(textoNombre,textoDNI);
+        Log.debug("Residente creado correctamente");
+        if (residente != null) {
+            JOptionPane.showMessageDialog(null, "Residente\n"+residente.toString());
+            Log.debug("Residente creado correctamente");
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "El Residente no existe");
+            Log.debug("Residente no encontrado");
+        }
+        
     }
     
     public static void ingresarDepartamento(){
@@ -99,7 +123,13 @@ public class Vista{
         textoDescripcion = VistaUtil.pedirTexto("Ingrese la descripción del Departamento");
         if (textoDescripcion == null) return;
 
-        Controlador.ingresarDepartamento(textoNumeroPiso, textoNumeroDepartamento, textoDescripcion);
+        if (Controlador.ingresarDepartamento(textoNumeroPiso, textoNumeroDepartamento, textoDescripcion)){
+            JOptionPane.showMessageDialog(null, "Departamento ingresado correctamente");
+            Log.debug("Departamento ingresado correctamente");
+        }else{
+            JOptionPane.showMessageDialog(null, "Error ingresando el departamento");
+            Log.warn("No se ingreso el departamento");
+        }
 
     }
 
@@ -108,7 +138,15 @@ public class Vista{
         if (textoNumeroPiso == null) return;
         textoNumeroDepartamento = VistaUtil.pedirTexto("Ingrese el Número del departamento \n(Solo dos caracteres, ej: 1A)");
         if (textoNumeroDepartamento == null) return;
-        Controlador.mostrarDepartamentos(textoNumeroPiso, textoNumeroDepartamento);
+        
+        Departamento departamento = Controlador.mostrarDepartamentos(textoNumeroPiso, textoNumeroDepartamento);
+        if (departamento != null){
+            JOptionPane.showMessageDialog(null, "");
+            Log.debug("Departamento mostrado correctamente: ");
+        }else{
+            JOptionPane.showMessageDialog(null, "No se encontro el departamento");
+            Log.warn("No se encontro el departamento");
+        }
     }
     
     public static void mudarResidente(){
@@ -118,7 +156,13 @@ public class Vista{
         if (textoNumeroPiso == null) return;
         textoNumeroDepartamento = VistaUtil.pedirTexto("Ingrese el Número del departamento \n(Solo dos caracteres, ej: 1A)");
         if (textoNumeroDepartamento == null) return;
-        Controlador.mudarResidente(textoDNI, textoNumeroPiso, textoNumeroDepartamento);
+        if (Controlador.mudarResidente(textoDNI, textoNumeroPiso, textoNumeroDepartamento)){
+            JOptionPane.showMessageDialog(null, "Residente mudado correctamente");
+            Log.debug("Residente mudado correctamente");
+        }else{
+            JOptionPane.showMessageDialog(null, "Error mudando al Residente");
+            Log.warn("Error mudando al residente");
+        }
     }
     
     public static void salir(){

@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import model.Departamento;
 import model.Residente;
 import util.DatabaseManager;
 import util.Log;
@@ -85,6 +86,32 @@ public class ResidenteDAO implements GenericDAO<Residente>{
         return residentes;
     }
 
+    public boolean mudarResidente(Residente residente,int piso, String numero){
+        DepartamentoDAO dpDAO = new DepartamentoDAO();
+        Departamento departamento = dpDAO.buscar(numero, piso);
+        if (departamento == null) {
+            Log.warn("Intento de mudar a un departamento inexistente: Piso " + piso + ", Depto " + numero);
+            return false;
+        }
+        
+        String sql = "UPDATE residente SET numero_piso = ?, numero_departamento = ? WHERE DNI = ?";
+        try (PreparedStatement ps = DatabaseManager.obtenerConexion().prepareStatement(sql)) {
+            ps.setInt(1, piso);
+            ps.setString(2, numero);
+            ps.setInt(3, residente.getDni());
 
+            int filasActualizadas = ps.executeUpdate();
+            if (filasActualizadas > 0) {
+                Log.debug("Residente " + residente.getDni() + " mudado al piso " + piso + ", depto " + numero);
+                return true;
+            } else {
+                Log.warn("No se encontró al residente con DNI: " + residente.getDni());
+                return false;
+            }
+        } catch (SQLException e) {
+            Log.error("Error mudando el residente", e);
+            return false;
+        }   
+    }
 
 }

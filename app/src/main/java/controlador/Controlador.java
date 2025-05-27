@@ -32,20 +32,20 @@ public class Controlador {
         return residenteDAO.insertar(residente);
     }
     
-    public static boolean mostrarResidente(String nombre){
-        return true;
+    public static Residente mostrarResidente(String nombre,int dni){
+        return residenteDAO.buscar(nombre, dni);
     }
     
     public static boolean ingresarDepartamento(int nroPiso,String desc,String nroDepartamento){
-        return true;
+        return departamentoDAO.insertar(new Departamento(nroPiso,nroDepartamento,desc));
     }
 
-    public static boolean mostrarDepartamentos(int nroPiso,String nroDepartamento){
-        return true;
+    public static Departamento mostrarDepartamentos(int nroPiso,String nroDepartamento){
+        return departamentoDAO.buscar(nroDepartamento, nroPiso);
     }
     
     public static boolean mudarResidente(int dni,int nroPiso,String nroDepartamento){
-        return true;
+        return residenteDAO.mudarResidente(residente, nroPiso, nroDepartamento);
     }
     
     public static void salir(){
