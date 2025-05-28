@@ -4,19 +4,33 @@ package vistas;
 import com.formdev.flatlaf.intellijthemes.FlatCarbonIJTheme;
 import javax.swing.JOptionPane;
 import controlador.Controlador;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import model.*;
 import util.Log;
 import util.VistaUtil;
 
-public class Vista{
+@SuppressWarnings("ALL")
+public final class Vista{
     //Atributos Residente
-    private static Integer textoDNI;
+    private Integer textoDNI;
     private static String textoNombre;
     private static String textoEmail;
     //Atributos Departamentos
     private static String textoDescripcion;
     private static Integer textoNumeroPiso;
     private static String textoNumeroDepartamento;
+    private List<Departamento> infoDepartamentos;
+
+    public Vista() {
+        actualizarDepartamentosList();
+    }
+    
+    public void actualizarDepartamentosList(){
+        this.infoDepartamentos = Controlador.buscarDepartamentos();
+    }
     
     /**
      * Un menu lanzado con JOptionPane conla elecciones que el usuario puede elegir.
@@ -53,7 +67,7 @@ public class Vista{
      * usuario eligio
      * @param opcion 
      */
-    private static void opcionElegida(int opcion){
+    private void opcionElegida(int opcion){
         switch (opcion) {
             case 0 -> {
                 Log.debug("Eleccion: \'ingresar residente\'");
@@ -69,7 +83,7 @@ public class Vista{
             }
             case 3 -> {
                 Log.debug("Eleccion: \'mostrar departamentos\'");
-                mostrarDepartamentos();
+                mostrarDepartamento();
             }
             case 4 -> {
                 Log.debug("Eleccion: \'mudar residente\'");
@@ -86,7 +100,8 @@ public class Vista{
      * Se ingresan el dni, nombre y email verificando que el usuario no cancele
      * o quede vacio
      */
-    public static void ingresarResidente(){
+    private void ingresarResidente(){
+        actualizarDepartamentosList(); // ← muy importante
         textoDNI = VistaUtil.pedirEntero("Ingrese el DNI del Residente");
         if (textoDNI == null) return;
 
@@ -95,13 +110,47 @@ public class Vista{
 
         textoEmail = VistaUtil.pedirTexto("Ingrese el email del Residente");
         if (textoEmail == null) return;
-        if (Controlador.ingresarResidente(textoDNI, textoNombre, textoEmail)) 
+        
+        Integer seleccionPiso = (Integer) JOptionPane.showInputDialog(
+            null,
+            "Seleccione el piso",
+            "Elección de Piso",
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            getNumerosPisos(), // Integer[]
+            null);
+
+        if (seleccionPiso == null) return;
+
+
+        // Mostrar lista de números de departamento
+        String[] departamentosDisponibles = getNumerosDepartamentosPorPiso(seleccionPiso);
+        if (departamentosDisponibles.length == 0) {
+            JOptionPane.showMessageDialog(null, "No hay departamentos en ese piso.");
+            return;
+        }
+
+        String seleccionNumero = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione el número de departamento",
+                "Elección de Departamento",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                departamentosDisponibles, // solo deptos del piso seleccionado
+                null);
+
+        if (seleccionNumero == null) return;
+      
+        
+        Departamento dp = Controlador.mostrarDepartamento(seleccionPiso, seleccionNumero);
+         
+        if (Controlador.ingresarResidente(textoDNI, textoNombre, textoEmail, dp)) 
             JOptionPane.showMessageDialog(null,"Residente Ingresado correctamente");
         else
             JOptionPane.showMessageDialog(null, "Residente no ingresado");
     }
     
-    public static void mostrarResidente(){
+    private void mostrarResidente(){
         textoNombre = VistaUtil.pedirTexto("Ingrese el nombre del Residente a buscar");
         if (textoNombre == null) return;
         textoDNI = VistaUtil.pedirEntero("Ingrese el DNI del Residente");
@@ -119,7 +168,7 @@ public class Vista{
         
     }
     
-    public static void ingresarDepartamento(){
+    private void ingresarDepartamento(){
         textoNumeroPiso = VistaUtil.pedirEntero("Ingrese el Número del piso");
         if (textoNumeroPiso == null) return;
 
@@ -139,13 +188,13 @@ public class Vista{
 
     }
 
-    public static void mostrarDepartamentos(){
+    private void mostrarDepartamento(){
         textoNumeroPiso = VistaUtil.pedirEntero("Ingrese el Número del piso");
         if (textoNumeroPiso == null) return;
         textoNumeroDepartamento = VistaUtil.pedirTexto("Ingrese el Número del departamento \n(Solo dos caracteres, ej: 1A)");
         if (textoNumeroDepartamento == null) return;
         
-        Departamento departamento = Controlador.mostrarDepartamentos(textoNumeroPiso, textoNumeroDepartamento);
+        Departamento departamento = Controlador.mostrarDepartamento(textoNumeroPiso, textoNumeroDepartamento);
         if (departamento != null){
             JOptionPane.showMessageDialog(null, "");
             Log.debug("Departamento mostrado correctamente: ");
@@ -155,7 +204,7 @@ public class Vista{
         }
     }
     
-    public static void mudarResidente(){
+    private void mudarResidente(){
         textoDNI = VistaUtil.pedirEntero("Ingrese el DNI del Residente a mudar");
         if (textoDNI == null) return;
         textoNumeroPiso = VistaUtil.pedirEntero("Ingrese el Número del piso para mudar al Residente");
@@ -173,5 +222,25 @@ public class Vista{
     
     public static void salir(){
         Controlador.salir();
+    }
+    
+    private String[] getNumerosDepartamentosPorPiso(int pisoSeleccionado) {
+        List<String> lista = new ArrayList<>();
+        for (Departamento d : infoDepartamentos) {
+            if (d.getNumeroPiso() == pisoSeleccionado) {
+                lista.add(d.getNumeroDepartamento());
+            }
+        }
+        return lista.toArray(new String[0]);
+    }
+
+   
+
+    private Integer[] getNumerosPisos() {
+        Set<Integer> set = new HashSet<>();
+        for (Departamento d : infoDepartamentos) {
+          set.add(d.getNumeroPiso());
+        }
+        return set.toArray(new Integer[0]);
     }
 }

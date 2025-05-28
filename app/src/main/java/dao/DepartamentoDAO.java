@@ -59,7 +59,29 @@ public class DepartamentoDAO implements GenericDAO<Departamento>{
             return null;
         }
     }
-
+    
+    public Departamento buscarPorId(int id) {
+        String sql = "SELECT * FROM departamento WHERE id = ?";
+        try(PreparedStatement ps = DatabaseManager.obtenerConexion().prepareStatement(sql)){
+            ps.setInt(1, id);
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    int nroPiso = rs.getInt("numero_piso");
+                    String nroDep = rs.getString("numero_departamento");
+                    String descr = rs.getString("descripcion");
+                    Departamento d = new Departamento(nroPiso,nroDep,descr);
+                    Log.debug("Objeto Departamento creado correctamente: "+d);
+                    return d;
+                }
+                Log.debug("Objeto Departamento no encontrado");
+                return null;
+            }
+        }catch(SQLException e){
+            Log.error("Error buscando el id del departamento: "+id, e);
+            return null;
+        }
+    }
+    
     @Override
     public List<Departamento> buscarTodos() {
         List<Departamento> departamentos = new ArrayList<>();

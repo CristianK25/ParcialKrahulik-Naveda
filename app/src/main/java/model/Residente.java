@@ -14,11 +14,12 @@ public class Residente {
     public Residente() {
     }
 
-    public Residente(String nombre, String email, int dni, LocalDate fechaIngreso) {
+    public Residente(String nombre, String email, int dni, LocalDate fechaIngreso, Departamento departamento) {
         this.nombre = nombre;
         this.email = email;
         this.dni = dni;
         this.fechaIngreso = fechaIngreso;
+        this.departamento = departamento;
     }
 
     

@@ -57,12 +57,15 @@ public class ResidenteDAO implements GenericDAO<Residente>{
             ps.setInt(2, dni);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    Departamento dep = new Departamento();
                     Residente r = new Residente(
                     rs.getString("nombre"),
                     rs.getString("email"),
                     rs.getInt("DNI"),
-                    rs.getDate("fecha_ingreso").toLocalDate()
+                    rs.getDate("fecha_ingreso").toLocalDate(),
+                    dep
                     );
+                    r.setDepartamento(new DepartamentoDAO().buscarPorId(r.getDepartamento().getId()));
                     return r;
                 }
             }
@@ -80,12 +83,15 @@ public class ResidenteDAO implements GenericDAO<Residente>{
         try (PreparedStatement ps = DatabaseManager.obtenerConexion().prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {        
             while (rs.next()) {
+                Departamento dep = new Departamento();
                 Residente r = new Residente(
                 rs.getString("nombre"),
                 rs.getString("email"),
                 rs.getInt("DNI"),
-                rs.getDate("fecha_ingreso").toLocalDate()
+                rs.getDate("fecha_ingreso").toLocalDate(),
+                dep
                 );
+                r.setDepartamento(new DepartamentoDAO().buscarPorId(r.getDepartamento().getId()));
                 residentes.add(r);
                 Log.debug("Residente encontrado: "+ r.getDni());
             }

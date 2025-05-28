@@ -4,6 +4,7 @@ package controlador;
 import dao.DepartamentoDAO;
 import dao.ResidenteDAO;
 import java.time.LocalDate;
+import java.util.List;
 import model.Departamento;
 import model.Residente;
 import util.DatabaseManager;
@@ -30,8 +31,8 @@ public class Controlador {
         vista.menuPrincipal();
     }
     
-    public static boolean ingresarResidente(int dni, String nombre, String email){
-        return residenteDAO.insertar(new Residente(nombre,email,dni,LocalDate.now()));
+    public static boolean ingresarResidente(int dni, String nombre, String email, Departamento d){
+        return residenteDAO.insertar(new Residente(nombre,email,dni,LocalDate.now(),d));
     }
     
     public static Residente mostrarResidente(String nombre,int dni){
@@ -42,7 +43,7 @@ public class Controlador {
         return departamentoDAO.insertar(new Departamento(nroPiso,nroDepartamento,desc));
     }
 
-    public static Departamento mostrarDepartamentos(int nroPiso,String nroDepartamento){
+    public static Departamento mostrarDepartamento(int nroPiso,String nroDepartamento){
         return departamentoDAO.buscar(nroDepartamento, nroPiso);
     }
     
@@ -50,6 +51,11 @@ public class Controlador {
         return residenteDAO.mudarResidente(residente, nroPiso, nroDepartamento);
     }
     
+    public static List<Departamento> buscarDepartamentos(){
+        return departamentoDAO.buscarTodos();
+    }
+            
+            
     public static void salir(){
         Log.debug("Cerrando app....");
     }

@@ -64,5 +64,29 @@ public class DatabaseManager {
             }
         }else
             return conn;
-    } 
+    }
+    
+    public void iniciarDepartamentos(){
+        String[][] departamentos = {
+            {"1","A1","Tres ambientes"},
+            {"1","A2","Dos ambientes"},
+            {"1","A3","Dos ambientes"},
+            {"2","B1","Tres ambientes"},
+            {"2","B2","Dos ambientes"},
+            {"2","B3","Dos ambientes"}
+        };
+        String sql = "INSERT INTO departamentos(numero_piso, numero_departamento, descripcion) VALUES (?,?,?);";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        for (String[] departamento : departamentos) {
+            pstmt.setInt(1, Integer.parseInt(departamento[0]));  // numero
+            pstmt.setString(2, departamento[1]);  // titulo
+            pstmt.setString(3, departamento[2]);  // clasificacion
+            pstmt.addBatch();
+        }
+        pstmt.executeBatch();
+        System.out.println("Libros de ejemplo insertados correctamente.");
+        } catch (SQLException e) {
+            Log.error("Error al insertar libros de ejemplo: ",e);
+        }
+    }
 }
