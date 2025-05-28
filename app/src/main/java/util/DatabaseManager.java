@@ -8,8 +8,8 @@ import java.sql.SQLException;
 
 public class DatabaseManager {
     private static Connection conn;
-    private static final String url = "jdbc:h2:./Base de datos/db";
-    private static final String user = "";
+    private static final String url = "jdbc:h2:./Base de datos/DB_ParcialNaveda";
+    private static final String user = "sa";
     private static final String password = "";
     
     /**
@@ -23,26 +23,26 @@ public class DatabaseManager {
                 + "nombre VARCHAR(50),"
                 + "email VARCHAR(60),"
                 + "fecha_ingreso DATE,"
-                + "numero_piso INT,"
-                + "numero_departamento VARCHAR(2),"
+                + "id_departamento INT,"
                 + "PRIMARY KEY (DNI),"
-                + "FOREIGN KEY (numero_piso, numero_departamento) REFERENCES departamento(numero_piso, numero_departamento)"
+                + "FOREIGN KEY (id_departamento) REFERENCES departamento(id)"
                 + ");";
         String tablaDepartamento = "CREATE TABLE IF NOT EXISTS departamento("
+                + "id INT AUTO_INCREMENT,"
                 + "numero_piso INT,"
                 + "numero_departamento VARCHAR(2),"
                 + "descripcion VARCHAR(100),"
-                + "PRIMARY KEY (numero_piso,numero_departamento)"
+                + " PRIMARY KEY (id)"
                 + ");";
-        crearTabla(tablaResidente, "Residente");
         crearTabla(tablaDepartamento,"Departamento");
+        crearTabla(tablaResidente, "Residente");
     }
     
     
     public static void crearTabla(String sql, String nombreTabla){
         try(PreparedStatement ps = DatabaseManager.obtenerConexion().prepareStatement(sql)){
             ps.executeUpdate();
-            Log.debug("Tabla creada correctamente: " + nombreTabla);
+            Log.info("Tabla creada correctamente: " + nombreTabla);
         }catch(SQLException e){
             Log.error("No se pudo crear la tabla", e);
         }
@@ -56,7 +56,8 @@ public class DatabaseManager {
     public static Connection obtenerConexion(){
         if(conn == null) {
             try {
-                return DriverManager.getConnection(url, user, password);
+                conn = DriverManager.getConnection(url, user, password);
+                return conn;
             } catch (SQLException ex) {
                 Log.error("No se pudo conectar a " + url, ex);
                 return null;

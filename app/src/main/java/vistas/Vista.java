@@ -56,21 +56,27 @@ public class Vista{
     private static void opcionElegida(int opcion){
         switch (opcion) {
             case 0 -> {
+                Log.debug("Eleccion: \'ingresar residente\'");
                 ingresarResidente();
             }
             case 1 -> {
+                Log.debug("Eleccion: \'mostrar residente\'");
                 mostrarResidente();
             }
             case 2 -> {
+                Log.debug("Eleccion: \'ingresar departamento\'");
                 ingresarDepartamento();
             }
             case 3 -> {
+                Log.debug("Eleccion: \'mostrar departamentos\'");
                 mostrarDepartamentos();
             }
             case 4 -> {
+                Log.debug("Eleccion: \'mudar residente\'");
                 mudarResidente();
             }
             case 5 -> {
+                Log.debug("Eleccion: \'salir\'");
                 salir();
             }
         }
@@ -108,7 +114,7 @@ public class Vista{
         }
         else {
             JOptionPane.showMessageDialog(null, "El Residente no existe");
-            Log.debug("Residente no encontrado");
+            Log.warn("Residente no encontrado");
         }
         
     }

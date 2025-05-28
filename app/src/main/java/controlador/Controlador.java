@@ -6,6 +6,7 @@ import dao.ResidenteDAO;
 import java.time.LocalDate;
 import model.Departamento;
 import model.Residente;
+import util.DatabaseManager;
 import util.Log;
 import vistas.Vista;
 
@@ -21,6 +22,8 @@ public class Controlador {
      * la base de datos con sus tablas.
      */
     public static void iniciarApp(){
+        Log.debug("Iniciando Base de datos....");
+        DatabaseManager.iniciarBaseDatos();
         residenteDAO = new ResidenteDAO();
         departamentoDAO = new DepartamentoDAO();
         vista = new Vista();
@@ -28,8 +31,7 @@ public class Controlador {
     }
     
     public static boolean ingresarResidente(int dni, String nombre, String email){
-        Residente residente = new Residente(nombre,email,dni,LocalDate.now());
-        return residenteDAO.insertar(residente);
+        return residenteDAO.insertar(new Residente(nombre,email,dni,LocalDate.now()));
     }
     
     public static Residente mostrarResidente(String nombre,int dni){

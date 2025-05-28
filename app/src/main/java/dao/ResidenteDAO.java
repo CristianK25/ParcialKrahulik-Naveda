@@ -15,18 +15,27 @@ import util.Log;
 
 public class ResidenteDAO implements GenericDAO<Residente>{
 
+    /*
+    + "DNI INT,"
+                + "nombre VARCHAR(50),"
+                + "email VARCHAR(60),"
+                + "fecha_ingreso DATE,"
+                + "id_departamento INT,"
+                + "PRIMARY KEY (DNI),"
+                + "FOREIGN KEY (id_departamento) REFERENCES departamento(id)"
+                + ");";
+    */
     @Override
     public boolean insertar(Residente r) {
         String sql = "INSERT INTO residente "
-                + "(DNI,nombre,email,fecha_ingreso,numero_piso,numero_departamento) "
-                + "VALUES (?,?,?,?,?,?)";
+                + "(DNI,nombre,email,fecha_ingreso,id_departamento) "
+                + "VALUES (?,?,?,?,?)";
         try(PreparedStatement ps = DatabaseManager.obtenerConexion().prepareStatement(sql)){
             ps.setInt(1, r.getDni());
             ps.setString(2,r.getNombre());
             ps.setString(3,r.getEmail());
             ps.setDate(4,Date.valueOf(r.getFechaIngreso()));
-            ps.setInt(5,r.getDepartamento().getNumeroPiso());
-            ps.setString(6,r.getDepartamento().getNumeroDepartamento());
+            ps.setInt(5,r.getDepartamento().getId());
             if(ps.executeUpdate() != 0){
                 Log.debug("Datos insertados correctamente: " + r);
                 return true;
@@ -94,11 +103,10 @@ public class ResidenteDAO implements GenericDAO<Residente>{
             return false;
         }
         
-        String sql = "UPDATE residente SET numero_piso = ?, numero_departamento = ? WHERE DNI = ?";
+        String sql = "UPDATE residente SET id_departamento = ? WHERE DNI = ?";
         try (PreparedStatement ps = DatabaseManager.obtenerConexion().prepareStatement(sql)) {
             ps.setInt(1, piso);
             ps.setString(2, numero);
-            ps.setInt(3, residente.getDni());
 
             int filasActualizadas = ps.executeUpdate();
             if (filasActualizadas > 0) {

@@ -3,6 +3,7 @@ package model;
 
 
 public class Departamento {
+    private int id;
     private String descripcion;
     private int numeroPiso;
     private String numeroDepartamento;
@@ -15,6 +16,15 @@ public class Departamento {
         this.numeroPiso = numeroPiso;
         this.numeroDepartamento = numeroDepartamento;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     
 
     public String getDescripcion() {

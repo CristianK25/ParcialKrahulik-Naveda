@@ -16,7 +16,7 @@ public class DepartamentoDAO implements GenericDAO<Departamento>{
     @Override
     public boolean insertar(Departamento departamento) {
         String sql = "INSERT INTO departamento"
-                + "(descripcion, numero_piso, numero_departamento)"
+                + "(numero_piso, numero_departamento, descripcion)"
                 + " VALUES (?,?,?)";
         try(PreparedStatement ps = DatabaseManager.obtenerConexion().prepareStatement(sql)){
             ps.setString(1,departamento.getDescripcion());
