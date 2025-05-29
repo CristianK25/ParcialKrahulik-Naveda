@@ -26,4 +26,4 @@ Sistema de gestión para administrar residentes y departamentos en un complejo r
 
 ### Instalación
 1. Clona el repositorio:
-   git clone https://github.com/tu-usuario/tu-repositorio.git
+   git clone https://github.com/CristianK25/ParcialKrahulik-Naveda.git
