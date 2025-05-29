@@ -47,10 +47,6 @@ public class Controlador {
         return departamentoDAO.buscar(nroDepartamento, nroPiso);
     }
     
-    public static boolean mudarResidente(int dni,int nroPiso,String nroDepartamento){
-        return residenteDAO.mudarResidente(residente, nroPiso, nroDepartamento);
-    }
-    
     public static List<Departamento> buscarDepartamentos(){
         return departamentoDAO.buscarTodos();
     }

@@ -42,7 +42,6 @@ public class Departamento {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Departamento{");
         sb.append("\nNumero del Piso = ").append(numeroPiso);
         sb.append("\nNumero del Departamento = ").append(numeroDepartamento);
         sb.append("\nDescripcion = ").append(descripcion);

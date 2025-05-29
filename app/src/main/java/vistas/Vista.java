@@ -41,7 +41,6 @@ public final class Vista{
             "Mostrar Residente",
             "Ingresar Departamento",
             "Mostrar Departamentos",
-            "Mudar Residente",
             "Salir"};
         int opcion = 0;
         JOptionPane.showMessageDialog(null,
@@ -59,7 +58,7 @@ public final class Vista{
                     opciones,
                     opciones[0]); 
             opcionElegida(opcion);
-        }while(opcion!=5);
+        }while(opcion!=4);
     }
     
     /**
@@ -86,10 +85,6 @@ public final class Vista{
                 mostrarDepartamento();
             }
             case 4 -> {
-                Log.debug("Eleccion: \'mudar residente\'");
-                mudarResidente();
-            }
-            case 5 -> {
                 Log.debug("Eleccion: \'salir\'");
                 salir();
             }
@@ -152,10 +147,10 @@ public final class Vista{
     }
     
     private void mostrarResidente(){
-        textoNombre = VistaUtil.pedirTexto("Ingrese el nombre del Residente a buscar");
-        if (textoNombre == null) return;
         textoDNI = VistaUtil.pedirEntero("Ingrese el DNI del Residente");
         if (textoDNI == null) return;
+        textoNombre = VistaUtil.pedirTexto("Ingrese el nombre del Residente a buscar");
+        if (textoNombre == null) return;
         Residente residente = Controlador.mostrarResidente(textoNombre,textoDNI);
         Log.debug("Residente creado correctamente");
         if (residente != null) {
@@ -197,7 +192,7 @@ public final class Vista{
         
         Departamento departamento = Controlador.mostrarDepartamento(textoNumeroPiso, textoNumeroDepartamento);
         if (departamento != null){
-            JOptionPane.showMessageDialog(null, "");
+            JOptionPane.showMessageDialog(null, departamento.toString());
             Log.debug("Departamento mostrado correctamente: ");
         }else{
             JOptionPane.showMessageDialog(null, "No se encontro el departamento");
@@ -205,21 +200,6 @@ public final class Vista{
         }
     }
     
-    private void mudarResidente(){
-        textoDNI = VistaUtil.pedirEntero("Ingrese el DNI del Residente a mudar");
-        if (textoDNI == null) return;
-        textoNumeroPiso = VistaUtil.pedirEntero("Ingrese el Número del piso para mudar al Residente");
-        if (textoNumeroPiso == null) return;
-        textoNumeroDepartamento = VistaUtil.pedirTexto("Ingrese el Número del departamento \n(Solo dos caracteres, ej: 1A)");
-        if (textoNumeroDepartamento == null) return;
-        if (Controlador.mudarResidente(textoDNI, textoNumeroPiso, textoNumeroDepartamento)){
-            JOptionPane.showMessageDialog(null, "Residente mudado correctamente");
-            Log.debug("Residente mudado correctamente");
-        }else{
-            JOptionPane.showMessageDialog(null, "Error mudando al Residente");
-            Log.warn("Error mudando al residente");
-        }
-    }
     
     public static void salir(){
         Controlador.salir();

@@ -57,7 +57,9 @@ public class ResidenteDAO implements GenericDAO<Residente>{
             ps.setInt(2, dni);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Departamento dep = new Departamento();
+                    int idDepartamento = rs.getInt("id_departamento");
+                    Departamento dep = new DepartamentoDAO().buscarPorId(idDepartamento);
+                    
                     Residente r = new Residente(
                     rs.getString("nombre"),
                     rs.getString("email"),
@@ -65,7 +67,7 @@ public class ResidenteDAO implements GenericDAO<Residente>{
                     rs.getDate("fecha_ingreso").toLocalDate(),
                     dep
                     );
-                    r.setDepartamento(new DepartamentoDAO().buscarPorId(r.getDepartamento().getId()));
+                    
                     return r;
                 }
             }
@@ -99,33 +101,6 @@ public class ResidenteDAO implements GenericDAO<Residente>{
             Log.error("Error al buscar todos los residentes", e);
         }
         return residentes;
-    }
-
-    public boolean mudarResidente(Residente residente,int piso, String numero){
-        DepartamentoDAO dpDAO = new DepartamentoDAO();
-        Departamento departamento = dpDAO.buscar(numero, piso);
-        if (departamento == null) {
-            Log.warn("Intento de mudar a un departamento inexistente: Piso " + piso + ", Depto " + numero);
-            return false;
-        }
-        
-        String sql = "UPDATE residente SET id_departamento = ? WHERE DNI = ?";
-        try (PreparedStatement ps = DatabaseManager.obtenerConexion().prepareStatement(sql)) {
-            ps.setInt(1, piso);
-            ps.setString(2, numero);
-
-            int filasActualizadas = ps.executeUpdate();
-            if (filasActualizadas > 0) {
-                Log.debug("Residente " + residente.getDni() + " mudado al piso " + piso + ", depto " + numero);
-                return true;
-            } else {
-                Log.warn("No se encontró al residente con DNI: " + residente.getDni());
-                return false;
-            }
-        } catch (SQLException e) {
-            Log.error("Error mudando el residente", e);
-            return false;
-        }   
     }
 
 }

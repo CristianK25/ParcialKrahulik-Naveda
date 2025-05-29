@@ -72,6 +72,7 @@ public class DepartamentoDAO implements GenericDAO<Departamento>{
                     String nroDep = rs.getString("numero_departamento");
                     String descr = rs.getString("descripcion");
                     Departamento d = new Departamento(nroPiso,nroDep,descr);
+                    d.setId(id);
                     Log.debug("Objeto Departamento creado correctamente: "+d);
                     return d;
                 }
