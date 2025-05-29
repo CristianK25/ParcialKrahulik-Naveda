@@ -1,0 +1,8 @@
+2025-05-29 09:00:20.995527-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'D3' (DEPARTAMENTO: ""NUMERO_PISO"" INTEGER)"
+Data conversion error converting "'D3' (DEPARTAMENTO: ""NUMERO_PISO"" INTEGER)"; SQL statement:
+INSERT INTO departamento(numero_piso, numero_departamento, descripcion) VALUES (?,?,?) [22018-230]
+2025-05-29 09:07:04.419619-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "NUMERO_DEPARTAMENTO CHARACTER VARYING(2)": "'Un ambiente' (11)"
+Value too long for column "NUMERO_DEPARTAMENTO CHARACTER VARYING(2)": "'Un ambiente' (11)"; SQL statement:
+INSERT INTO departamento(numero_piso, numero_departamento, descripcion) VALUES (?,?,?) [22001-230]

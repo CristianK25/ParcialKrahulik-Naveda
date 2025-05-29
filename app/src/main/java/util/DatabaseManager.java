@@ -36,6 +36,7 @@ public class DatabaseManager {
                 + ");";
         crearTabla(tablaDepartamento,"Departamento");
         crearTabla(tablaResidente, "Residente");
+        iniciarDepartamentos();
     }
     
     
@@ -66,7 +67,7 @@ public class DatabaseManager {
             return conn;
     }
     
-    public void iniciarDepartamentos(){
+    public static void iniciarDepartamentos(){
         String[][] departamentos = {
             {"1","A1","Tres ambientes"},
             {"1","A2","Dos ambientes"},
@@ -75,7 +76,9 @@ public class DatabaseManager {
             {"2","B2","Dos ambientes"},
             {"2","B3","Dos ambientes"}
         };
-        String sql = "INSERT INTO departamentos(numero_piso, numero_departamento, descripcion) VALUES (?,?,?);";
+        String sql = "MERGE INTO departamento (numero_piso, numero_departamento, descripcion) " +
+             "KEY(numero_piso, numero_departamento) " +
+             "VALUES (?,?,?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
         for (String[] departamento : departamentos) {
             pstmt.setInt(1, Integer.parseInt(departamento[0]));  // numero
@@ -84,7 +87,7 @@ public class DatabaseManager {
             pstmt.addBatch();
         }
         pstmt.executeBatch();
-        System.out.println("Libros de ejemplo insertados correctamente.");
+        Log.debug("Libros de ejemplo insertados correctamente.");
         } catch (SQLException e) {
             Log.error("Error al insertar libros de ejemplo: ",e);
         }

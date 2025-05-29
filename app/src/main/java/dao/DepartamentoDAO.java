@@ -19,9 +19,9 @@ public class DepartamentoDAO implements GenericDAO<Departamento>{
                 + "(numero_piso, numero_departamento, descripcion)"
                 + " VALUES (?,?,?)";
         try(PreparedStatement ps = DatabaseManager.obtenerConexion().prepareStatement(sql)){
-            ps.setString(1,departamento.getDescripcion());
-            ps.setInt(2, departamento.getNumeroPiso());
-            ps.setString(3, departamento.getNumeroDepartamento());
+            ps.setInt(1, departamento.getNumeroPiso());
+            ps.setString(2, departamento.getNumeroDepartamento());
+            ps.setString(3,departamento.getDescripcion());
             if(ps.executeUpdate() != 0){
                 Log.debug("Datos insertados correctamente: " + departamento);
                 return true;
@@ -44,10 +44,12 @@ public class DepartamentoDAO implements GenericDAO<Departamento>{
             ps.setInt(2, numero_piso);
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
+                    int id = rs.getInt("id");
                     int nroPiso = rs.getInt("numero_piso");
                     String nroDep = rs.getString("numero_departamento");
                     String descr = rs.getString("descripcion");
                     Departamento d = new Departamento(nroPiso,nroDep,descr);
+                    d.setId(id);
                     Log.debug("Objeto Departamento creado correctamente: "+d);
                     return d;
                 }

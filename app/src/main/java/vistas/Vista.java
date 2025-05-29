@@ -111,14 +111,15 @@ public final class Vista{
         textoEmail = VistaUtil.pedirTexto("Ingrese el email del Residente");
         if (textoEmail == null) return;
         
+        Integer[] pisosDisponibles = getNumerosPisos();
         Integer seleccionPiso = (Integer) JOptionPane.showInputDialog(
             null,
             "Seleccione el piso",
             "Elección de Piso",
             JOptionPane.PLAIN_MESSAGE,
             null,
-            getNumerosPisos(), // Integer[]
-            null);
+            pisosDisponibles, // Integer[]
+            pisosDisponibles[0]);
 
         if (seleccionPiso == null) return;
 
