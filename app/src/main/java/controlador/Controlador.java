@@ -39,7 +39,7 @@ public class Controlador {
         return residenteDAO.buscar(nombre, dni);
     }
     
-    public static boolean ingresarDepartamento(int nroPiso,String desc,String nroDepartamento){
+    public static boolean ingresarDepartamento(int nroPiso,String nroDepartamento,String desc){
         return departamentoDAO.insertar(new Departamento(nroPiso,nroDepartamento,desc));
     }
 
